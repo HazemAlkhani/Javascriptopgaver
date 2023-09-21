@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farveskifter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 18px;
+        }
+        label{
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+<h1>Baggrundsfarveskifter</h1>
+<label for="colorSelect">Vælg en farve:</label>
+<select id="colorSelect">
+    <option value="Black">Sort</option>
+    <option value="Green">Grøn</option>
+    <option value="Red">Rød</option>
+    <option value="Yellow">Gul</option>
+    <option value="Pink">Pink</option>
+    <option value="white">hvid</option>
+    <option value="lightblue">Lyseblå</option>
+    <option value="lightgreen">Lysegrøn</option>
+    <option value="lightpink">Lyserød</option>
+    <option value="lightyellow">Lysegul</option>
+
+</select>
+
+<script>
+    function changeBackgroundColor() {
+        const selectedColor = document.getElementById("colorSelect").value;
+        document.body.style.backgroundColor = selectedColor;
+    }
+
+    document.getElementById("colorSelect").addEventListener("change", changeBackgroundColor);
+
+    document.body.style.backgroundColor = "white";
+</script>
+</body>
+</html>

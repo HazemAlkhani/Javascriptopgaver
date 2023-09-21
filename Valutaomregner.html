@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Valutaomregner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .converter {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 5px;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #2f8006;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .has-Unsupported {
+            color: #ef4425;
+        }
+
+    </style>
+</head>
+<body>
+<div class="converter">
+    <h2>Valutaomregner</h2>
+    <label for="fromCurrency">Fra Valuta:</label>
+    <select id="fromCurrency">
+        <option value="USD">USD (US Dollar)</option>
+        <option value="EUR">EUR (Euro)</option>
+        <option value="DKK">DKK (Kr. - Danish Kroner)</option>
+    </select>
+
+    <label for="toCurrency">Til Valuta:</label>
+    <select id="toCurrency">
+        <option value="USD">USD (US Dollar)</option>
+        <option value="EUR">EUR (Euro)</option>
+        <option value="DKK">DKK (Kr. - Danish Kroner)</option>
+    </select>
+
+    <label for="amount">Beløb:</label>
+    <input type="number" id="amount" placeholder="Indtast beløb">
+    <!-- Add an ID to the input field for easier event handling -->
+
+    <button onclick="convertCurrency()">Konvertere</button>
+
+    <p id="result"></p>
+</div>
+<script>
+
+    function convertCurrency() {
+        const fromCurrency = document.getElementById("fromCurrency").value;
+        const toCurrency = document.getElementById("toCurrency").value;
+        const amount = parseFloat(document.getElementById("amount").value);
+
+        const exchangeRates = {
+            "USD": {
+                "EUR": 0.85,
+                "DKK": 6.24
+            },
+            "EUR": {
+                "USD": 1.18,
+                "DKK": 7.07
+            },
+            "DKK": {
+                "USD": 0.16,
+                "EUR": 0.14
+            }
+        };
+
+        const resultElement = document.getElementById("result");
+
+        if (isNaN(amount)) {
+            resultElement.textContent = "Indtast venligst et gyldigt beløb.";
+            resultElement.classList.remove("has-Unsupported");
+            return;
+        }
+
+        if (!(fromCurrency in exchangeRates) || !(toCurrency in exchangeRates[fromCurrency])) {
+            resultElement.textContent = "Ikke-understøttet valutaomregning.";
+            resultElement.classList.add("has-Unsupported");
+            return;
+        }
+
+        const convertedAmount = amount * exchangeRates[fromCurrency][toCurrency];
+        resultElement.textContent = `${amount} ${fromCurrency} er cirka ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        resultElement.classList.remove("has-Unsupported");
+    }
+
+
+    document.getElementById("amount").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            convertCurrency();
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalender</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .calendar {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #2f8006;
+    }
+
+    td {
+      cursor: pointer;
+    }
+
+    td:hover {
+      background-color: #595959;
+    }
+
+    .event {
+      font-weight: bold;
+    }
+
+    .notes {
+      font-style: italic;
+    }
+
+    .has-event {
+      background-color: red;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+<div class="Kalender">
+  <h2 id="calendarTitle"></h2>
+  <label for="monthSelector">Vælg måned:</label>
+  <select id="monthSelector">
+    <option value="0">Januar</option>
+    <option value="1">Februar</option>
+    <option value="2">marts</option>
+    <option value="3">April</option>
+    <option value="4">Maj</option>
+    <option value="5">Juni</option>
+    <option value="6">Juli</option>
+    <option value="7">August</option>
+    <option value="8">September</option>
+    <option value="9">October</option>
+    <option value="10">November</option>
+    <option value="11">December</option>
+  </select>
+  <table>
+    <thead>
+    <tr>
+      <th>Søndag</th>
+      <th>Mondag</th>
+      <th>Tirsdag</th>
+      <th>Onsdag</th>
+      <th>Torsdag</th>
+      <th>Fridag</th>
+      <th>Lørdag</th>
+    </tr>
+    </thead>
+    <tbody id="calendarBody"></tbody>
+  </table>
+</div>
+<script>
+  const calendarBody = document.getElementById("calendarBody");
+  const calendarTitle = document.getElementById("calendarTitle");
+  const monthSelector = document.getElementById("monthSelector");
+
+  function generateCalendar(year, month) {
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
+    const daysInMonth = endDate.getDate();
+    const firstDay = startDate.getDay();
+    let currentDate = 1;
+
+    let tableHTML = "<tr>";
+
+
+    const selectedMonthName = monthSelector.options[month].text;
+
+    calendarTitle.textContent = `${selectedMonthName} ${year}`;
+
+    for (let i = 0; i < firstDay; i++) {
+      tableHTML += "<td></td>";
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      tableHTML += `<td data-date="${year}-${month + 1}-${currentDate}">${currentDate}</td>`;
+      currentDate++;
+
+      if ((firstDay + i) % 7 === 0) {
+        tableHTML += "</tr><tr>";
+      }
+    }
+
+    for (let i = 0; i < (7 - endDate.getDay() - 1); i++) {
+      tableHTML += "<td></td>";
+    }
+
+    tableHTML += "</tr>";
+    calendarBody.innerHTML = tableHTML;
+
+    const dateCells = document.querySelectorAll("td[data-date]");
+    dateCells.forEach(cell => {
+      cell.addEventListener("click", addEvent);
+    });
+  }
+
+  function addEvent(event) {
+    const date = event.target.getAttribute("data-date");
+    const eventName = prompt(`Add an event or note for ${date}:`);
+    if (eventName !== null) {
+      event.target.innerHTML = `<span class="event">${event.target.innerHTML}</span><br><span class="notes">${eventName}</span>`;
+      event.target.classList.add("has-event");
+    }
+  }
+
+
+  monthSelector.addEventListener("change", function () {
+    const selectedMonth = parseInt(monthSelector.value);
+    generateCalendar(2023, selectedMonth);
+  });
+
+  generateCalendar(2023, 8);
+</script>
+</body>
+</html>

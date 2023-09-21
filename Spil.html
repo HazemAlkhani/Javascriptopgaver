@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Tal Gættespil</title>
+
+    <style>
+        h1 {
+            color: #5c00ff;
+        }
+
+        #message {
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .info {
+            color: #ef4425;
+        }
+    </style>
+</head>
+<body>
+<h1>Tal Gættespil</h1>
+<p>Gæt et tal mellem 1 og 100:</p>
+<input type="number" id="userGuess" min="1" max="100">
+<button onclick="checkGuess()">Tjek</button>
+<p id="message"></p>
+
+<script>
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+
+    let attempts = 0;
+
+    function checkGuess() {
+        const userGuess = parseInt(document.getElementById("userGuess").value);
+        const messageElement = document.getElementById("message");
+
+        if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+            messageElement.textContent = "Indtast venligst et gyldigt tal mellem 1 og 100.";
+            messageElement.className = "error";
+            return;
+        }
+
+        attempts++;
+
+        if (userGuess === randomNumber) {
+            messageElement.textContent = `Tillykke! Du gættede tallet ${randomNumber} in ${attempts} forsøg.`;
+            messageElement.className = "success";
+        } else if (userGuess < randomNumber) {
+            messageElement.textContent = "Prøv et højere tal.";
+            messageElement.className = "info";
+        } else {
+            messageElement.textContent = "Prøv et lavere tal.";
+            messageElement.className = "info";
+        }
+    }
+
+    document.getElementById("userGuess").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            checkGuess();
+        }
+    });
+</script>
+</body>
+</html>
